@@ -104,15 +104,17 @@ function update_history(action){
 	hand_num.innerText = "Hand number: " + n;
 	
 	if(hand_over()){
-		var ai_card = shuffled_cards[1]+1;
-		if(ai_card == 11){
+		var ai_card = shuffled_cards[1];
+		if(ai_card == 10){
 			ai_card = "J";
-		} else if(ai_card == 12){
+		} else if(ai_card == 11){
 			ai_card = "Q";
-		} else if(ai_card == 13){
+		} else if(ai_card == 12){
 			ai_card = "K";
-		} else if (ai_card == 14) {
+		} else if (ai_card == 13) {
 			ai_card = "A";
+		} else {
+			ai_card++;
 		}
 		alert("hand over! AI had: " + ai_card);
 		clear_history();
@@ -126,16 +128,18 @@ function update_history(action){
 		winnings.innerText = "Winnings: " + win_amount;
 		hand_num.innerText = "Hand number: " + n;
 		if(hand_over()){
-			var ai_card = shuffled_cards[1]+1;
-			if(ai_card == 11){
+			var ai_card = shuffled_cards[1];
+			if(ai_card == 10){
 				ai_card = "J";
-			} else if(ai_card == 12){
+			} else if(ai_card == 11){
 				ai_card = "Q";
-			} else if(ai_card == 13){
+			} else if(ai_card == 12){
 				ai_card = "K";
-			} else if (ai_card == 14) {
+			} else if (ai_card == 13) {
 				ai_card = "A";
-			}
+			} else {
+			ai_card++;
+		}
 			alert("hand over! AI had: " + ai_card);
 			clear_history();
 		}
@@ -165,8 +169,10 @@ function clear_history(){
 
 function ai_action(){
 	if(Math.random() < weights[shuffled_cards[1] + hand_history][0]){
+		alert(weights[shuffled_cards[1] + hand_history][0]);
 		return "p";
 	} else {
+		alert(weights[shuffled_cards[1] + hand_history][1]);
 		return "b";
 	}
 }
