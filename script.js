@@ -11,6 +11,8 @@ var chips = 100;
 var opp_chips = 100;
 var n = 1;
 var win_amount = 0;
+var current_winnings = 0;
+var won_hand = "won";
 var pot_size = ante_size*2;
 var last = "";
 var hand_history = "";
@@ -116,7 +118,7 @@ function update_history(action){
 		} else {
 			ai_card++;
 		}
-		alert("hand over! AI had: " + ai_card);
+		alert("Hand over! AI had: " + ai_card + ". You " + won_hand + " " + Math.abs(current_winnings));
 		clear_history();
 	} else {
 		var ai_move = ai_action();
@@ -140,8 +142,8 @@ function update_history(action){
 			} else {
 			ai_card++;
 		}
-			alert("hand over! AI had: " + ai_card);
-			clear_history();
+		alert("Hand over! AI had: " + ai_card + ". You " + won_hand + " " + Math.abs(current_winnings));
+		clear_history();
 		}
 	}
 }
@@ -169,31 +171,34 @@ function clear_history(){
 
 function ai_action(){
 	if(Math.random() < weights[shuffled_cards[1] + hand_history][0]){
-		alert(weights[shuffled_cards[1] + hand_history][0]);
 		return "p";
 	} else {
-		alert(weights[shuffled_cards[1] + hand_history][1]);
 		return "b";
 	}
 }
 
 function hand_over(){
+	current_winnings = 0;
 	if(hand_history.length > 1){
 		if(hand_history.charAt(hand_history.length - 1) === "p"){
 			if(hand_history === "pp"){
-				shuffled_cards[0] > shuffled_cards[1] ? win_amount += ante_size : win_amount -= ante_size;
+				shuffled_cards[0] > shuffled_cards[1] ? current_winnings = ante_size : current_winnings = -ante_size;
 			} else if (hand_history === "pbp"){
-				win_amount += in_position ? ante_size : -ante_size;
+				current_winnings = in_position ? ante_size : -ante_size;
 			} else {  //bp
-				win_amount += !in_position ? ante_size : -ante_size;
+				current_winnings = !in_position ? ante_size : -ante_size;
 			}
+			won_hand = current_winnings > 0 ? "won" : "lost";
+			win_amount += current_winnings;
 			return true;
 		} else if (hand_history.substring(hand_history.length - 2) === "bb"){
 			if(shuffled_cards[0] > shuffled_cards[1]){
-				win_amount += ante_size + bet_size;
+				current_winnings = ante_size + bet_size;
 			} else {
-				win_amount -= ante_size + bet_size;
+				current_winnings = -1 * (ante_size + bet_size);
 			}
+			won_hand = current_winnings > 0 ? "won" : "lost";
+			win_amount += current_winnings;
 			return true;
 		}
 	}
